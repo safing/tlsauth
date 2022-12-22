@@ -1,3 +1,3 @@
-module github.com/safing/traefik-tlsauth
+module github.com/safing/tlsauth
 
 go 1.19

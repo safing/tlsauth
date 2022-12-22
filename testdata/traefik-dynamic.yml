@@ -2,7 +2,7 @@ http:
   middlewares:
     my-tlsauth:
       plugin:
-        traefik-tlsauth:
+        tlsauth:
           usernameHeader: "User"
           users:
             alice: alice

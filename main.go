@@ -1,4 +1,4 @@
-package traefik_tlsauth
+package tlsauth
 
 import (
 	"context"
