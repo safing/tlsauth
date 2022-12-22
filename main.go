@@ -44,10 +44,10 @@ func (ta *TLSAuth) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Check if we have a client certificate.
 	switch {
 	case r.TLS == nil:
-		http.Error(w, "TLS encryption is required for TLS based client authentication. (traefik-tlsauth)", http.StatusBadRequest)
+		http.Error(w, "TLS encryption is required for TLS based client authentication. (tlsauth)", http.StatusBadRequest)
 		return
 	case len(r.TLS.PeerCertificates) == 0:
-		http.Error(w, "TLS client certificate is required for TLS based client authentication. (traefik-tlsauth)", http.StatusBadRequest)
+		http.Error(w, "TLS client certificate is required for TLS based client authentication. (tlsauth)", http.StatusBadRequest)
 		return
 	}
 
@@ -55,7 +55,7 @@ func (ta *TLSAuth) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	username, ok := ta.findUserByCert(r.TLS.PeerCertificates[0])
 	if !ok {
 		// Respond with error when no user could be found.
-		http.Error(w, "TLS client certificate not permitted. (traefik-tlsauth)", http.StatusForbidden)
+		http.Error(w, "TLS client certificate not permitted. (tlsauth)", http.StatusForbidden)
 		return
 	}
 
