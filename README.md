@@ -1,4 +1,4 @@
-# Tlsauth Traefik Plugin
+# TLS Client Cert Authentication Traefik Plugin
 
 Traefik plugin to authenticate users based on the Common Name, DNS Names and Email Addresses of their TLS client certificate. Optionally add the username as a request header for the upstream service.
 
