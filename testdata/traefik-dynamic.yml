@@ -1,0 +1,23 @@
+http:
+  middlewares:
+    my-tlsauth:
+      plugin:
+        traefik-tlsauth:
+          usernameHeader: "User"
+          users:
+            alice: alice
+            alice1: alice # Alice has a second cert for a second device
+            # bob: # Bob lost his first cert
+            bob1: bob
+            charlie@example.org: charlie # Charlie uses his email cert instead
+
+tls:
+  certificates: # Server certificate for static configuration
+    - certFile: /certs/localhost.pem
+      keyFile: /certs/localhost-key.pem
+  options: # TLS Options
+    default: # Apply to all TLS endpoints, if not other options are specified
+      clientAuth: # Configure TLS client authentication.
+        caFiles:
+          - "/certs/rootCA.pem"
+        clientAuthType: "RequireAndVerifyClientCert"

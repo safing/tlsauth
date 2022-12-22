@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:v2.9
+    command:
+      # Enable Traefik UI on port 8080
+      - "--api.insecure=true"
+      # Print access logs
+      - "--accesslog=true"
+      # Deactivate comms in dev env
+      - "--global.checknewversion=false"
+      - "--global.sendanonymoususage=false"
+      # Load more (dynamic) config files
+      - "--providers.file.directory=/conf"
+      # Enabling docker provider
+      - "--providers.docker=true"
+      # Do not expose containers unless explicitly told so
+      - "--providers.docker.exposedbydefault=false"
+      # Define entrypoints.
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.https.address=:443"
+      - "--entrypoints.https.http.tls.domains=localhost"
+      # Add plugin.
+      - "--experimental.localplugins.traefik-tlsauth.modulename=github.com/safing/traefik-tlsauth"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8000:8080"
+    volumes:
+      - ./traefik-dynamic.yml:/conf/traefik-dynamic.yml
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/certs
+      - ..:/plugins-local/src/github.com/safing/traefik-tlsauth
+
+  whoami:
+    image: traefik/whoami
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - "traefik.enable=true"
+      # Configure on http
+      - "traefik.http.routers.whoami-http.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.whoami-http.entrypoints=http"
+      # Enable client tls auth on http handler for testing.
+      - "traefik.http.routers.whoami-http.middlewares=my-tlsauth@file"
+      # Configure on https
+      - "traefik.http.routers.whoami-https.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.whoami-https.entrypoints=https"
+      # Enable client tls auth.
+      - "traefik.http.routers.whoami-https.tls=true"
+      - "traefik.http.routers.whoami-https.middlewares=my-tlsauth@file"

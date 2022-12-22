@@ -1,0 +1,27 @@
+# The name of your plugin as displayed in the Plugins Catalog web UI.
+displayName: TLS Auth
+
+# For now, `middleware` is the only type available.
+type: middleware
+
+# The import path of your plugin.
+import: "github.com/safing/traefik-tlsauth"
+
+# A brief description of what your plugin is doing.
+summary: Authenticate users based on the Common Name, DNS Names and Email Addresses of their TLS client certificate. Optionally add the username as a request header for the upstream service.
+
+# Medias associated to the plugin (optional)
+# iconPath: foo/icon.png
+# bannerPath: foo/banner.png
+
+# Configuration data for your plugin.
+# This is mandatory,
+# and Plugins Catalog will try to execute the plugin with the data you provide as part of its startup validity tests.
+testData:
+  usernameHeader: "User"
+  users:
+    alice: alice
+    alice1: alice # Alice has a second cert for a second device
+    # bob: # Bob lost his first cert
+    bob1: bob
+    charlie@example.org: charlie # Charlie uses his email cert instead
